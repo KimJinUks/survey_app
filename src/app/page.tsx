@@ -109,7 +109,11 @@ export default function Home() {
         "• 나이 :"
       ].join('\n'); // 줄바꿈 포함, 배열로 관리하면 가독성이 좋아집니다.
 
-      const smsValue = `sms:${phoneNumber}?body=${encodeURIComponent(fullUrl)}`;
+      // iOS와 Android 모두 호환되는 SMS URL 형식
+      // iOS: sms:번호&body=메시지
+      // Android: sms:번호?body=메시지
+      // 범용: sms:번호?&body=메시지
+      const smsValue = `sms:${phoneNumber}?&body=${encodeURIComponent(fullUrl)}`;
       setSmsQrValue(smsValue);
       
       setViewState("qr");
