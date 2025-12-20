@@ -16,7 +16,7 @@ export default function Home() {
   // 전화번호 입력 팝업 관련 상태
   const [showPhonePopup, setShowPhonePopup] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
-  const longPressTimer = useRef<NodeJS.Timeout | null>(null);
+  const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const LONG_PRESS_DURATION = 800; // 0.8초
 
   // 브라우저 뒤로가기 방지 (preview와 qr 화면에서)
