@@ -21,22 +21,35 @@ export default function Home() {
 
   // 브라우저 뒤로가기 방지 (preview와 qr 화면에서)
   useEffect(() => {
+    // SSR 환경에서는 window가 없으므로 체크
+    if (typeof window === "undefined") return;
+    
     if (viewState === "preview" || viewState === "qr") {
-      window.history.replaceState({ view: viewState, protected: true }, "");
-      
-      for (let i = 0; i < 50; i++) {
-        window.history.pushState({ view: viewState, index: i }, "");
+      try {
+        window.history.replaceState({ view: viewState, protected: true }, "");
+        
+        // iOS Safari 호환성을 위해 횟수 줄임
+        for (let i = 0; i < 10; i++) {
+          window.history.pushState({ view: viewState, index: i }, "");
+        }
+
+        const handlePopState = () => {
+          try {
+            window.history.pushState({ view: viewState, recovered: true }, "");
+          } catch {
+            // iOS에서 history 조작 실패 시 무시
+          }
+        };
+
+        window.addEventListener("popstate", handlePopState);
+
+        return () => {
+          window.removeEventListener("popstate", handlePopState);
+        };
+      } catch (e) {
+        // history API 사용 불가 시 무시
+        console.warn("History API not available:", e);
       }
-
-      const handlePopState = () => {
-        window.history.pushState({ view: viewState, recovered: true }, "");
-      };
-
-      window.addEventListener("popstate", handlePopState);
-
-      return () => {
-        window.removeEventListener("popstate", handlePopState);
-      };
     }
   }, [viewState]);
 
