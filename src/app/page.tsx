@@ -357,7 +357,7 @@ export default function Home() {
                       생성 중...
                     </span>
                   ) : (
-                    "추첨하기"
+                    "투표하기"
                   )}
                 </button>
               </div>
