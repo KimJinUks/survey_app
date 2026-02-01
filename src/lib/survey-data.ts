@@ -7,19 +7,25 @@ export const DEMO_SURVEY = {
     {
       id: 1,
       label: "사진1",
-      image: "/images/photoOne.png",
+      image: "/images/photoOne.jpg",
       color: "#FFB7C5",
     },
     {
       id: 2,
       label: "사진2",
-      image: "/images/photoTwo.png",
+      image: "/images/photoTwo.jpg",
       color: "#87CEEB",
     },
     {
       id: 3,
       label: "사진3",
-      image: "/images/photoThree.png",
+      image: "/images/photoThree.jpg",
+      color: "#DEB887",
+    },
+    {
+      id: 4,
+      label: "사진4",
+      image: "/images/photoFour.jpg",
       color: "#DEB887",
     },
   ],

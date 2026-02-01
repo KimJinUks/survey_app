@@ -23,11 +23,11 @@ export default function Home() {
   useEffect(() => {
     // SSR 환경에서는 window가 없으므로 체크
     if (typeof window === "undefined") return;
-    
+
     if (viewState === "preview" || viewState === "qr") {
       try {
         window.history.replaceState({ view: viewState, protected: true }, "");
-        
+
         // iOS Safari 호환성을 위해 횟수 줄임
         for (let i = 0; i < 10; i++) {
           window.history.pushState({ view: viewState, index: i }, "");
@@ -92,7 +92,7 @@ export default function Home() {
   // 추첨하기 버튼 클릭 → QR 코드 생성
   const handleDrawLottery = useCallback(async () => {
     if (!selectedChoice) return;
-    
+
     setIsLoading(true);
 
     try {
@@ -128,7 +128,7 @@ export default function Home() {
       // 범용: sms:번호?&body=메시지
       const smsValue = `sms:${phoneNumber}?&body=${encodeURIComponent(fullUrl)}`;
       setSmsQrValue(smsValue);
-      
+
       setViewState("qr");
     } catch (error) {
       console.error("오류:", error);
@@ -167,7 +167,7 @@ export default function Home() {
   };
 
   return (
-    <main 
+    <main
       className="min-h-screen overflow-auto select-none bg-cover bg-center bg-no-repeat bg-fixed"
       style={{ backgroundImage: "url('/images/back.png')" }}
       onMouseDown={handleLongPressStart}
@@ -179,13 +179,13 @@ export default function Home() {
 
       {/* 전화번호 입력 팝업 */}
       {showPhonePopup && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4"
           onClick={(e) => {
             if (e.target === e.currentTarget) setShowPhonePopup(false);
           }}
         >
-          <div 
+          <div
             className="bg-white rounded-3xl p-6 max-w-sm w-full border border-gray-200 shadow-2xl"
             onMouseDown={(e) => e.stopPropagation()}
             onTouchStart={(e) => e.stopPropagation()}
@@ -201,7 +201,7 @@ export default function Home() {
                 <p className="text-gray-500 text-sm">SMS 발송용 번호를 입력하세요</p>
               </div>
             </div>
-            
+
             <input
               type="tel"
               value={phoneNumber}
@@ -210,7 +210,7 @@ export default function Home() {
               className="w-full px-4 py-4 bg-gray-50 border border-gray-200 rounded-xl text-gray-800 text-lg placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent mb-4 text-center tracking-wider"
               autoFocus
             />
-            
+
             <div className="flex gap-3">
               <button
                 onClick={() => setShowPhonePopup(false)}
@@ -248,9 +248,9 @@ export default function Home() {
         <div className="flex-1 flex items-center justify-center">
           {viewState === "selection" && (
             /* Selection Grid */
-            <div 
+            <div
               className="
-                flex flex-wrap justify-center gap-4 md:gap-6 max-w-2xl w-full
+                grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 max-w-2xl w-full place-items-center
               "
               onMouseDown={(e) => e.stopPropagation()}
               onTouchStart={(e) => e.stopPropagation()}
@@ -266,15 +266,12 @@ export default function Home() {
                     onClick={() => handleChoiceSelect(choice.id)}
                     disabled={isLoading}
                     className={
-                      "group relative aspect-square rounded-2xl overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-gray-300 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-4 focus:ring-purple-300 shadow-lg" +
-                      (isLast
-                        ? " mx-auto basis-full sm:basis-[45%] flex justify-center"
-                        : " basis-full sm:basis-[45%]")
+                      "group relative aspect-square rounded-2xl overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-gray-300 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-4 focus:ring-purple-300 shadow-lg w-full" +
+                      (isLast ? " sm:col-span-2 sm:justify-self-center" : "")
                     }
                     style={{
                       animationDelay: `${index * 100}ms`,
                       maxWidth: "320px",
-                      ...(isLast ? { alignSelf: "center" } : {}),
                     }}
                   >
                     {/* Background Image */}
@@ -283,7 +280,7 @@ export default function Home() {
                       alt={choice.label}
                       className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                     />
-                    
+
                     {/* Fallback gradient */}
                     <div
                       className="absolute inset-0 transition-opacity duration-300 -z-10"
@@ -309,7 +306,7 @@ export default function Home() {
 
           {viewState === "preview" && selectedChoiceData && (
             /* Preview Screen */
-            <div 
+            <div
               className="max-w-lg w-full"
               onMouseDown={(e) => e.stopPropagation()}
               onTouchStart={(e) => e.stopPropagation()}
@@ -321,7 +318,7 @@ export default function Home() {
                   alt={selectedChoiceData.label}
                   className="w-full h-full object-cover"
                 />
-                
+
                 {/* Fallback gradient */}
                 <div
                   className="absolute inset-0 -z-10"
@@ -366,7 +363,7 @@ export default function Home() {
 
           {viewState === "qr" && (
             /* QR Code Display */
-            <div 
+            <div
               className="bg-white rounded-3xl p-8 max-w-md w-full border border-gray-200 shadow-xl"
               onMouseDown={(e) => e.stopPropagation()}
               onTouchStart={(e) => e.stopPropagation()}
@@ -432,15 +429,15 @@ export default function Home() {
         {/* Footer */}
         <footer className="text-center py-2">
           <div className="flex justify-center">
-            <img 
-              src="/images/font.png" 
-              alt="Font Logo" 
+            <img
+              src="/images/font.png"
+              alt="Font Logo"
               className="h-12 max-w-xs object-contain"
               style={{ display: "block" }}
             />
           </div>
           <p className="text-gray-400 text-sm mt-2">
-            © Focus Art Book And All Types Of Texts  • 
+            © Focus Art Book And All Types Of Texts  •
           </p>
         </footer>
       </div>
